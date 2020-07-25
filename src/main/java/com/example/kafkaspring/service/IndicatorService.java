@@ -22,14 +22,15 @@ public class IndicatorService {
      * 消费者
      * @param record
      */
-    @KafkaListener(topics = "topic1", groupId = "aaa")
+    @KafkaListener(topics = "topic1", groupId = "consumergroup1")
     public void processMessage(ConsumerRecord<Integer, String> record) {
-        System.out.println("kafka processMessage start");
-        System.out.println("processMessage, topic = {"+record.topic()+"}, msg = "+ record.value());
+        System.out.println("kafka consume start");
+
+        System.out.println("consume...., topic = {"+record.topic()+"}, msg = "+ record.value()+",{"+ record.offset() +"}");
 
         // do something ...
 
-        System.out.println("kafka processMessage end");
+        System.out.println("kafka consume end");
     }
 
     /**
@@ -40,6 +41,7 @@ public class IndicatorService {
         System.out.println("kafka sendMessage start");
 
         ListenableFuture<SendResult<Integer, String>> future = kafkaTemplate.send(topic, data);
+
         future.addCallback(new ListenableFutureCallback<SendResult<Integer, String>>() {
             @Override
             public void onFailure(Throwable ex) {
